@@ -4,7 +4,7 @@ const typeDefs = require('./typeDefs');
 const resolvers = require('./resolver');
 const mongoose = require('mongoose');
 
-async function startServer() {
+async function startServer(uri, callback) {
     const app = express();
     const apolloServer = new ApolloServer({
         typeDefs,
@@ -21,12 +21,12 @@ async function startServer() {
         res.send("Hello from Apollo Server");
     })
 
-    await mongoose.connect('mongodb://localhost:27017/post_db', {
-       useUnifiedTopology: true,
-       useNewUrlParser: true
+    await mongoose.connect(`mongodb://a:a@localhost/test?authSource=admin`, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true
+    }, (d) => {
+        d ? console.log('callback error', d) : '';
     });
-
-    console.log('Mongoose connected');
 
     app.listen(4000, () => console.log('Server running on port 4000'));
 }
